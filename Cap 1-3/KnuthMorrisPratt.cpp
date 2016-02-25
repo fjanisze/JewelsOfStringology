@@ -1,3 +1,4 @@
+//Code from 2.1 and 3.1, Jewels of Stringology
 #include <iostream>
 #include <string>
 #include <vector>
@@ -5,8 +6,10 @@
 #include <tuple>
 
 //Define TEST_MODE is you want to run the gtest's
-#define TEST_MODE
+//#define TEST_MODE
+#ifdef TEST_MODE
 #include <gmock/gmock.h>
+#endif
 
 #include "../loadsampletext.hpp"
 using namespace std;
@@ -30,7 +33,7 @@ std::vector<long> compute_strong_board(const std::string& pat)
     return board;
 }
 
-//pg 24
+//pg 24 (This will search for all the match of pat in text)
 std::vector<long> knuth_morris_pratt(const std::string& text,
         const std::string& pat)
 {
@@ -54,7 +57,25 @@ std::vector<long> knuth_morris_pratt(const std::string& text,
     return res;
 }
 
-//This is the algorithm from CLRS
+//Original version which search for the first match only
+long knuth_morris_pratt_single(const std::string& text,
+        const std::string& pat)
+{
+    auto board = compute_strong_board(pat);
+    size_t n{text.size()},m{pat.size()};
+    for(long i{0},j{0};i<=n-m;)
+    {
+        while(j<m && pat[j]==text[i+j])
+            ++j;
+        if(j==m)
+            return i;
+        i += (j - board[j]);
+        j = board[j]>0?board[j]:0;
+    }
+    return -1; //Not found
+}
+
+//This is the algorithm from CLRS, for comparison purpose
 namespace CLRS
 {
     std::vector<long> prefix_function(const string& str)
