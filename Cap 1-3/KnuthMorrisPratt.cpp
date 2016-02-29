@@ -4,20 +4,13 @@
 #include <vector>
 #include <functional>
 #include <tuple>
-
-//Define TEST_MODE is you want to run the gtest's
-//#define TEST_MODE
-#ifdef TEST_MODE
-#include <gmock/gmock.h>
-#endif
-
 #include "../loadsampletext.hpp"
 using namespace std;
 
 //pg 35
 std::vector<long> compute_strong_board(const std::string& pat)
 {
-    size_t len{pat.size()};
+    long len{pat.size()};
     long t{-1};
     std::vector<long> board(len+1,-1);
     for(long i{0};i<=len;i++)
@@ -38,7 +31,7 @@ std::vector<long> knuth_morris_pratt(const std::string& text,
         const std::string& pat)
 {
     auto board = compute_strong_board(pat);
-    size_t n{text.size()},m{pat.size()};
+    long n{text.size()},m{pat.size()};
     std::vector<long> res;
     for(long i{0},j{0};i<=n-m;)
     {
@@ -62,7 +55,7 @@ long knuth_morris_pratt_single(const std::string& text,
         const std::string& pat)
 {
     auto board = compute_strong_board(pat);
-    size_t n{text.size()},m{pat.size()};
+    long n{text.size()},m{pat.size()};
     for(long i{0},j{0};i<=n-m;)
     {
         while(j<m && pat[j]==text[i+j])
@@ -117,7 +110,7 @@ namespace CLRS
 }
 
 
-#ifndef TEST_MODE
+#if 0
 int main()
 {
     cout.sync_with_stdio(false);
@@ -154,7 +147,7 @@ int main()
                     cout<<endl;
             }
             //Check for errors,just in case
-            size_t i = text.find(pat);
+            long i = text.find(pat);
             int ok_cnt{0};
             while(i!=string::npos)
             {
@@ -170,78 +163,5 @@ int main()
                 cout<<"This crap does not work!\n";
         }
     }
-}
-#else
-
-class kmp_test : public ::testing::Test
-{
-protected:
-    std::string sample;
-public:
-    kmp_test(){}
-    void SetUp()
-    {
-        sample = "abaabaabaabbabaaaabbbabababababbbcbi\
-                  bcbcbacbacbacbaabccaabccaacbbaccacca\
-                  abbcbcbcbcaabcbcbbcabcabcabcabbcaaaa\
-                  ab abb abab abaab abbaab aabbaab abb\
-                  abc abcc abccc abbccc aaabbcc aaabab\
-                  aba ab abaa b a baab aabaabb abaacbb";
-    }
-    void TearDown(){}
-};
-
-TEST_F(kmp_test,test_abaab)
-{
-    vector<long> results = knuth_morris_pratt(sample,"abaab");
-    EXPECT_EQ(results.size(),5);
-    EXPECT_EQ(results[0],0);
-    EXPECT_EQ(results[1],3);
-    EXPECT_EQ(results[2],6);
-    EXPECT_EQ(results[3],174);
-    EXPECT_EQ(results[4],292);
-}
-
-TEST_F(kmp_test,test_aab)
-{
-    vector<long> results = CLRS::knuth_morris_pratt(sample,"aab");
-    const long num_of_results{16};
-    const long correct_values[]={2,5,8,16,68,73,118,176,183,187,191,
-        239,247,287,291,294};
-    EXPECT_EQ(results.size(),num_of_results);
-    for(int i{0};i<num_of_results;i++)
-        EXPECT_EQ(results[i],correct_values[i]);
-}
-
-TEST_F(kmp_test,test_ababab)
-{
-    vector<long> results = knuth_morris_pratt(sample,"ababab");
-    const long num_of_results{3};
-    const long correct_values[]={21,23,25};
-    EXPECT_EQ(results.size(),num_of_results);
-    for(int i{0};i<num_of_results;i++)
-        EXPECT_EQ(results[i],correct_values[i]);
-}
-
-
-TEST_F(kmp_test,test_c)
-{
-    vector<long> results = knuth_morris_pratt(sample,"c");
-    const long num_of_results{38};
-    const long correct_values[]={33,55,57,60,63,66,71,72,76,77,
-        80,84,85,87,88,111,113,115,117,
-        121,123,126,129,132,135,139,218,
-        222,223,227,228,229,234,235,236,
-        243,244,303};
-    EXPECT_EQ(results.size(),num_of_results);
-    for(int i{0};i<num_of_results;i++)
-        EXPECT_EQ(results[i],correct_values[i]);
-
-}
-
-int main(int argc,char** argv)
-{
-    ::testing::InitGoogleMock(&argc,argv);
-    return RUN_ALL_TESTS();
 }
 #endif
