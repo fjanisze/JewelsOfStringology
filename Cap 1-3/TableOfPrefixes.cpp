@@ -7,7 +7,7 @@ using namespace std;
 long naive_scan(const string& pat,
         long p,long q)
 {
-    long k{0},len{pat.size()};
+    size_t k{0},len{pat.size()};
     while(p<len && q<len){
         if(pat[p++]!=pat[q++]) break;
         ++k;

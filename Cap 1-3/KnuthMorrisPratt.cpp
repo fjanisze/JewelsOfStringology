@@ -6,7 +6,7 @@ using namespace std;
 //pg 35
 std::vector<long> compute_strong_board(const std::string& pat)
 {
-    long len{pat.size()};
+    size_t len{pat.size()};
     long t{-1};
     std::vector<long> board(len+1,-1);
     for(long i{0};i<=len;i++)
@@ -27,7 +27,7 @@ std::vector<long> knuth_morris_pratt(const std::string& text,
         const std::string& pat)
 {
     auto board = compute_strong_board(pat);
-    long n{text.size()},m{pat.size()};
+    size_t n{text.size()},m{pat.size()};
     std::vector<long> res;
     for(long i{0},j{0};i<=n-m;)
     {
@@ -51,7 +51,7 @@ long knuth_morris_pratt_single(const std::string& text,
         const std::string& pat)
 {
     auto board = compute_strong_board(pat);
-    long n{text.size()},m{pat.size()};
+    size_t n{text.size()},m{pat.size()};
     for(long i{0},j{0};i<=n-m;)
     {
         while(j<m && pat[j]==text[i+j])

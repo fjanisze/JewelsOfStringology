@@ -11,7 +11,7 @@ using namespace std;
 //Rightmost occurrence of a character
 std::vector<long> compute_bad_shift_table(const std::string& pat)
 {
-    long pat_len{pat.size()};
+    size_t pat_len{pat.size()};
     //The bad shift table is calculated for all
     //the alphabet. Assuming 255 characters.
     std::vector<long> table(1<<8);
@@ -26,12 +26,12 @@ std::vector<long> compute_bad_shift_table(const std::string& pat)
 std::vector<long> compute_boyer_moore_shifts(const std::string& pat)
 {
     std::vector<long> suffix_table = compute_suffixes(pat);
-    long pat_len{pat.size()};
+    size_t pat_len{pat.size()};
     std::vector<long> shifts(pat.size());
     for(long i{0};i<pat_len;i++)
         shifts[i]=pat_len;
     long j{0};
-    for(long i{pat_len-1};i>=0;i--)
+    for(long i{(long)pat_len-1};i>=0;i--)
     {
         if(suffix_table[i]==i+1)
         {
@@ -55,8 +55,8 @@ std::vector<long> compute_boyer_moore_shifts(const std::string& pat)
 long boyer_moore_single(const std::string& text,
         const std::string& pat)
 {
-    long m{pat.size()},
-         n{text.size()};
+    size_t m{pat.size()},
+           n{text.size()};
     std::vector<long> good_shift_table = compute_boyer_moore_shifts(pat),
         bad_shift_table = compute_bad_shift_table(pat);
     for(long i{0};i<=n-m;i++)
@@ -68,7 +68,7 @@ long boyer_moore_single(const std::string& text,
         //shift may be negative, whereas good_shift_table[i] >= 0
         //for all i.
         i+=std::max(good_shift_table[j],
-                bad_shift_table[text[i+j]]-m+1+j);
+                (long)(bad_shift_table[text[i+j]]-m+1+j));
     }
 }
 
@@ -76,8 +76,8 @@ long boyer_moore_single(const std::string& text,
 std::vector<long> boyer_moore(const std::string& text,
         const std::string& pat)
 {
-    long m{pat.size()},
-         n{text.size()};
+    size_t m{pat.size()},
+           n{text.size()};
     std::vector<long> good_shift_table = compute_boyer_moore_shifts(pat),
         bad_shift_table = compute_bad_shift_table(pat),
         results;
@@ -91,7 +91,7 @@ std::vector<long> boyer_moore(const std::string& text,
         }
         else{
             i+=std::max(good_shift_table[j],
-                bad_shift_table[text[i+j]]-m+1+j);
+                (long)(bad_shift_table[text[i+j]]-m+1+j));
         }
     }
     return results;

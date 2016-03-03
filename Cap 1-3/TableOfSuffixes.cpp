@@ -16,10 +16,10 @@ std::vector<long> compute_suffixes(const std::string& pat)
 //Brute force algorithm
 std::vector<long> compute_suffixes_naive(const std::string& pat)
 {
-    long pat_len{pat.size()};
+    size_t pat_len{pat.size()};
     std::vector<long> table(pat_len);
     table[pat_len-1]=pat_len;
-    for(long i{pat_len-2};i>=0;i--)
+    for(long i{(long)pat_len-2};i>=0;i--)
     {
         long j{0};
         for(;(i-j>=0)&&(j<pat_len)&&(pat[pat_len-1-j]==pat[i-j]);j++);

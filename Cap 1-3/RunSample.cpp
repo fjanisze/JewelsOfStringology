@@ -2,7 +2,7 @@
 #include <tuple>
 #include <functional>
 #include "Functions.hpp"
-#include "../loadsampletext.hpp"
+#include "../sampletext.hpp"
 using namespace std;
 
 int main()
@@ -23,6 +23,7 @@ int main()
     };
     while(1)
     {
+        cout<<"Input the pattern: ";
         cin >> pat;
         if(pat.empty()) break;
         for(int n{0};n<num_of_algorithms;n++)
