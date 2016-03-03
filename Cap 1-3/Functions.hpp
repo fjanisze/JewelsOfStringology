@@ -15,3 +15,7 @@ namespace CLRS
 extern std::vector<long> knuth_morris_pratt(const std::string& text,const std::string& pat);
 }
 extern std::vector<long> boyer_moore(const std::string& text,const std::string& pat);
+
+extern std::vector<long> brute_force1(const std::string& text,const std::string& pat);
+extern std::vector<long> brute_force2(const std::string& text,const std::string& pat);
+
